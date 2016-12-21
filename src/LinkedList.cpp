@@ -5,25 +5,49 @@ using namespace std;
 class LinkedList{
 
   struct Node {
-    int x;
+    int val;
     Node *next; 
   };
 
 public: 
   LinkedList(){
-    head=NULL;
+    head = NULL;
+    cur = NULL;
   }
 
   void addValue(int value){
     Node *node = new Node();
-    node->x = value;
+    node->val = value;
     node->next = head;
     head = node; 
+
+    if( cur == NULL )
+      cur = head;
+
+  }
+
+  void rewind(){
+    cur = head;
+  }
+
+  void next(){
+    if( cur != NULL )
+      cur = cur->next;
+  }
+
+  int getValue(){
+    if ( cur != NULL)
+      return cur->val;
+    return 0; //FIXME:exception
+  }
+
+  int hasValue(){
+    return ( cur != NULL ? true : false );
   }
 
   int popValue(){
     Node *node = head;
-    int ret = node->x;
+    int ret = node->val;
 
     head = head->next;
     delete node;
@@ -32,6 +56,7 @@ public:
 
 private:
   Node *head;
+  Node *cur;
 
 };
 
@@ -44,9 +69,28 @@ int main() {
   list.addValue(10);
   list.addValue(20);
 
-  cout << list.popValue() << endl;
-  cout << list.popValue() << endl;
-  cout << list.popValue() << endl;
+  cout << "rewind list" << endl;
+  list.rewind();
+
+  while( list.hasValue()){
+      cout << "value = " << list.getValue() << endl;
+      list.next();
+  }
+
+  cout << "rewind list" << endl;
+  list.rewind();
+
+  cout << "value = " << list.popValue() << endl;
+  cout << "value = " << list.popValue() << endl;
+  cout << "value = " << list.popValue() << endl;
+
+  cout << "rewind list" << endl;
+  list.rewind();
+
+  while( list.hasValue()){
+      cout << "value = " << list.getValue() << endl;
+      list.next();
+  }
 
   return 0;
 
